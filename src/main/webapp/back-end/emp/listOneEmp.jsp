@@ -49,6 +49,7 @@
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 <table id="table-1">
 	<tr><td>
 		 <h3>員工資料</h3>
@@ -105,6 +106,6 @@
 
 	</tr>
 </table>
-
+</div>
 </body>
 </html>

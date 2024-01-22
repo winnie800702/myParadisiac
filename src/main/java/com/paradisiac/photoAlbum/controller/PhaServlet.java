@@ -47,8 +47,8 @@ public class PhaServlet extends HttpServlet {
 		String action = req.getParameter("action");
 		String forwardPath = "";
 
-		
-		if("getAll".equals(action)) {
+		//所有相簿
+		if("getAll".equals(action)) { 
 			forwardPath = getAllpha(req, res);
 			res.setContentType("text/html; charset=UTF-8");
 			RequestDispatcher dispatcher = req.getRequestDispatcher(forwardPath);
@@ -130,7 +130,7 @@ public class PhaServlet extends HttpServlet {
 //			PhotoAlbumVO phaVO = phaSvc.getPhaByPK(albNo);
 //		}
 		
-		//查單筆相簿(含所有照片)
+		//後台查單筆相簿(含所有照片)
 		if("getOne_For_Display".equals(action)) {			
 			forwardPath = getAllPho(req, res);
 			res.setContentType("text/html; charset=UTF-8");
@@ -138,6 +138,16 @@ public class PhaServlet extends HttpServlet {
 			dispatcher.forward(req, res);
 
 		}
+		
+		//前台查單筆相簿(含所有照片)
+		if("getOne_For_Display_Front".equals(action)) {			
+			forwardPath = getAllPho(req, res);
+			res.setContentType("text/html; charset=UTF-8");
+			RequestDispatcher dispatcher = req.getRequestDispatcher(forwardPath);
+			dispatcher.forward(req, res);
+
+		}
+		
 		//修改相簿(找PK)
 		if("getOne_For_Update".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
@@ -210,22 +220,29 @@ public class PhaServlet extends HttpServlet {
 		
 	}//doPost
 	
-	//查全部可瀏覽的頁數
+	//查全部可瀏覽的頁數 (查詢view 導致尚未新增)
 	private String getAllpha(HttpServletRequest req, HttpServletResponse res) { //從ListAll請求
+		String action = req.getParameter("action");
 		String page = req.getParameter("page"); //網址列會有page=空(第一頁) or 第幾頁
 		int currentPage = (page == null) ? 1 : Integer.parseInt(page); //如果第一次跳轉則page會是空值, 把1存進currentPage
 		
 		List<PhotoAlbumVO> phaList = phaSvc.getAllPha(currentPage);
 
-		if (req.getSession().getAttribute("phaPageQty") == null) {
-			int phaPageQty = phaSvc.getPageTotal();
-			req.getSession().setAttribute("phaPageQty", phaPageQty);
-		}
+//		if (req.getSession().getAttribute("phaPageQty") == null) {
+//			int phaPageQty = phaSvc.getPageTotal();
+//			req.getSession().setAttribute("phaPageQty", phaPageQty);
+//		}
+		int phaPageQty = phaSvc.getPageTotal();
+		req.getSession().setAttribute("phaPageQty", phaPageQty);
 		
 		req.setAttribute("phaList", phaList);
 		req.setAttribute("currentPage", currentPage);
-
-		return "/back-end/pha/listAllPha.jsp";
+		
+		if(action.equals("getOne_For_Display_Front")) {
+			return "/front-end/members/listOnePha_mem.jsp";
+		}else {
+			return "/back-end/pha/listAllPha.jsp";
+		}		
 	}
 	
 	//查相簿的所有照片
@@ -233,14 +250,18 @@ public class PhaServlet extends HttpServlet {
 
 		Integer albNo = null;
 		Integer memno = null;
+		String action = req.getParameter("action");
+		
 		//從session取得會員編號
-		Object memnoInt = (Integer)req.getSession(false).getAttribute("memno");
+		memno = (Integer)req.getSession(false).getAttribute("memno"); //Object memnoInt
+
 				
 		//會員查詢相簿
-		if(memnoInt != null) {
-			albNo = phaSvc.getPhaByMem((Integer) memnoInt);				
+		if(action.equals("getOne_For_Display_Front")) {
+//		if(memnoInt != null) {
+			albNo = phaSvc.getPhaByMem((Integer) memno);				
 			if(albNo != null) {	//有建立相簿
-				System.out.println(memnoInt + "取得相簿編號: "+albNo);				
+				System.out.println(memno + "取得相簿編號: "+albNo);				
 			}else { //尚未有相簿
 				return "/front-end/members/listOnePha_not_found.jsp";
 			}
@@ -258,12 +279,14 @@ public class PhaServlet extends HttpServlet {
 		List<PhoWithAlbDTO> list = phaDAO.searchAllPhoto(albNo, currentPage);
 System.out.println(list);
 
-		//view裡面沒找到相片的話, 則改查相簿VO回傳
-		if(list == null || list.isEmpty()) {
+		//view裡面沒找到相片的話, 則改查相簿VO回傳(後台照片刪光或尚未新增相片)
+		if((list == null || list.isEmpty()) && action.equals("getOne_For_Display")) {
 			PhotoAlbumVO phaVO = phaSvc.getPhaByPK(albNo);
 System.out.println(phaVO);
 			req.setAttribute("phaVO", phaVO);
 			return "/back-end/pha/listOnePhaWOpho.jsp";
+		}else if((list == null || list.isEmpty()) && action.equals("getOne_For_Display_Front")) {
+			return "/front-end/members/listOnePha_not_found.jsp";
 		}
 		
 		//如果view裡面有照片
@@ -276,7 +299,7 @@ System.out.println(phaVO);
 		PhotoAlbumVO phaVO = phaSvc.getPhaByPK(albNo);
 		req.setAttribute("phaVO", phaVO);
 		
-		if(memnoInt != null) { //會員查詢
+		if(action.equals("getOne_For_Display_Front")) { //會員查詢memno != null
 			req.setAttribute("albNo", albNo);		
 			return "/front-end/members/listOnePha_mem.jsp";
 		}else { //員工查詢

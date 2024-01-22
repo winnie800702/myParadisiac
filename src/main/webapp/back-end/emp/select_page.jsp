@@ -30,8 +30,8 @@
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
-<body>
 
+<div style="margin-left: 200px;">
 <table id="table-1">
    <tr><td><h3>員工系統首頁</h3><h4></h4></td></tr>	
 </table>
@@ -95,6 +95,6 @@
 <ul>
   <li><a href='addEmp.jsp'>Add</a> a new Emp.</li>
 </ul>
-
+</div>
 </body>
 </html>

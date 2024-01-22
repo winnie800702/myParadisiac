@@ -51,6 +51,7 @@ th, td {
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 	<table id="table-1">
 		<tr>
 			<td>
@@ -143,7 +144,7 @@ th, td {
 		<br> <input type="hidden" name="action" value="insert"> <input
 			type="submit" value="°e¥X·s¼W">
 	</FORM>
-
+</div>
 </body>
 
 

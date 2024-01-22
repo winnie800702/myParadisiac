@@ -49,6 +49,7 @@
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 <table id="table-1">
 	<tr><td>
 		 <h3>員工資料修改</h3>
@@ -125,6 +126,7 @@
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="empno" value="<%=empVO.getEmpno()%>">
 <input type="submit" value="送出修改"></FORM>
+</div>
 </body>
 
 

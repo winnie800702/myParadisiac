@@ -115,6 +115,8 @@ h1 {
     	<h2>新增相簿</h2>
     </div> 
 	<div class="form-container" style="border: 1px solid black;">
+	<jsp:useBean id="mem" scope="page"
+					class="com.paradisiac.members.service.MembersService" />
 	<form action="${pageContext.request.contextPath}/pha.do" method="post"
 			enctype="multipart/form-data">
 		<div class="col-md-12">
@@ -123,7 +125,12 @@ h1 {
 <!-- 					<label for="albumNo">相簿編號</label> <input type="text" id="albNo" name="albNo" > -->
 <!-- 				</div> -->
 				<div class="form-group">
-					<label for="memberNo">會員編號</label> <input type="text" id="memNo" name="memNo" value="${phaVO.memNo==null?'':phaVO.memNo}">
+					<label for="memberNo">會員編號</label> <!--  <input type="text" id="memNo" name="memNo" value="${phaVO.memNo==null?'':phaVO.memNo}">-->
+					<select name="memNo">
+						<c:forEach var="me" items="${mem.all}">
+							<option value="${me.memno}">${me.memno}
+						</c:forEach>
+					</select>
 				</div>
 				<div class="form-group">
 					<label for="albumName">相簿名稱</label> <input type="text"

@@ -63,6 +63,7 @@ h1 {
 
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 	<div class="custom-container">	
 	<%-- 錯誤表列 --%>
 		<c:if test="${not empty errorMsgs}">
@@ -169,6 +170,6 @@ h1 {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+</div>
 </body>
 </html>

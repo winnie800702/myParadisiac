@@ -91,6 +91,7 @@
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 <div class="container mt-5">
 <div id="box">
 <table id="table-1">
@@ -138,7 +139,7 @@
 	
 	<div class="text-center">
 	 <c:choose>
-        <c:when test="${currentPage > 1}">
+      <c:when test="${currentPage > 1}">
 		<a href="${pageContext.request.contextPath}/dept.do?action=getAll&page=1" class="pagination-link">至第一頁</a>&nbsp;
 	  </c:when>
         <c:otherwise>
@@ -147,7 +148,7 @@
     </c:choose>
     
     <c:choose>
-        <c:when test="${currentPage - 1 != 0}">
+      <c:when test="${currentPage - 1 != 0}">
 		<a href="${pageContext.request.contextPath}/dept.do?action=getAll&page=${currentPage - 1}" class="pagination-link">上一頁</a>&nbsp;
 	  </c:when>
         <c:otherwise>
@@ -168,16 +169,17 @@
 	                                      
 	  <c:choose>
         <c:when test="${currentPage != deptPageQty}">   
-		<a href="${pageContext.request.contextPath}/dept.do?action=getAll&page=${deptPageQty}" class="pagination-link">至最後一頁</a>&nbsp;
-	  </c:when>
+			<a href="${pageContext.request.contextPath}/dept.do?action=getAll&page=${deptPageQty}" class="pagination-link">至最後一頁</a>&nbsp;
+	  	</c:when>
         <c:otherwise>
             <a href="${pageContext.request.contextPath}/dept.do?action=getAll" class="pagination-link" style="pointer-events: none; cursor: default;">最後一頁</a>&nbsp;
         </c:otherwise>
     </c:choose>                                     
 	<br>
 </div>
+</div>
 <script>
-	//控制表單的按鈕當按下那個按鈕時就把按下的value值傳回給後端，做到自動切換2個按鈕的觸發，這是用來分辦現在按的是哪個
+	//控制表單的按鈕當按下那個按鈕時就把按下的value值傳回給後端，做到自動切換2個按鈕的觸發，這是用來分辦現在按的是哪個(一個form表單有兩個按鈕)
     document.querySelectorAll('button[type="submit"]').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelector('input[name="action"]').value = this.value;
@@ -186,6 +188,6 @@
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>	
-
+</div>
 </body>
 </html>

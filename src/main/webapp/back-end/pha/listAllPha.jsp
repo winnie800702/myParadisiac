@@ -53,6 +53,58 @@
         .btn-separator {
         margin-right: 5px; 
         }
+        <!--table-->
+    	.album {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.album .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.album .col-md-7 {
+    flex: 0 0 70%;
+    max-width: 70%;
+    position: relative;
+}
+
+.album .col-md-5 {
+    flex: 0 0 30%;
+    max-width: 30%;
+}
+
+.album img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.album-info {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.album-info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.album-info table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.album-info table td:first-child {
+    width: 40%;
+}
+
+.album-info table td:nth-child(2) {
+    width: 60%;
+}
 
     </style>
 </head>
@@ -75,7 +127,7 @@
             <div class="row g-0">
                 <div class="col-md-7">
                     <img id="albPhoto" src="<%=request.getContextPath()%>/dbg.do?alb_no=${pha.albNo}" 
-                    style="width: 100%; height: 200px; object-fit: cover;" alt="相簿封面" class="img-fluid">
+                    style="width: 100%; height: 300px; object-fit: cover;" alt="相簿封面" class="img-fluid">
                 </div>
                 <div class="col-md-5">
                     <div class="album-info">
