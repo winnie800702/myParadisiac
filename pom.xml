@@ -9,12 +9,12 @@
 		<version>2.7.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>myParadisiac</groupId>
-	<artifactId>myParadisiac</artifactId>
+	<groupId>Paradisiac</groupId>
+	<artifactId>Paradisiac</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>myParadisiac</name>
-	<description>myParadisiac</description>
+	<name>Paradisiac</name>
+	<description>Paradisiac</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

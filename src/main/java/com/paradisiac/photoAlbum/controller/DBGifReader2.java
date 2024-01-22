@@ -12,15 +12,7 @@ import com.paradisiac.photoAlbum.service.PhotoAlbumService_interface;
 @WebServlet("/dbg.do")
 public class DBGifReader2 extends HttpServlet {
 	
-//	private PhotoAlbumService_interface phaSvc; 
-//	
-//	public void init() throws ServletException{
-//		phaSvc = new PhotoAlbumServiceImpl();
-//	}
-//	
-//	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//		doPost(req, res);
-//	}
+
 	Connection con;
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -29,23 +21,18 @@ public class DBGifReader2 extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		res.setContentType("image/gif");
 		ServletOutputStream out = res.getOutputStream();
+		String photoCol = null;
 		
 		
-		if(req.getParameter("alb_no") != null) { //req.getParameter("alb_no").length() != 0)
+		if(req.getParameter("alb_no") != null) { 
 			try {
 				Statement stmt = con.createStatement();
 				String albNo = req.getParameter("alb_no"); //相簿的id(PK)
 				ResultSet rs = stmt.executeQuery(
 					"select alb_photo from photo_album where alb_no =" +albNo);//alb_photo是blob照片
-
 				if (rs.next()) {
-					BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream("alb_photo"));
-					byte[] buf = new byte[4 * 1024]; // 4K buffer
-					int len;
-					while ((len = in.read(buf)) != -1) { //讀到完是-1
-						out.write(buf, 0, len); //從0
-					}
-					in.close();
+					photoCol = "alb_photo";
+					readPhoto(out, rs, photoCol);
 				} else {
 					res.sendError(HttpServletResponse.SC_NOT_FOUND); //404 p324, 方法p134
 				}
@@ -54,33 +41,27 @@ public class DBGifReader2 extends HttpServlet {
 				out.close();
 			} catch (Exception e) {
 				System.out.println(e); //直接印出錯誤訊息
-			}
-			
+			}			
 		}
 
 		if(req.getParameter("photo_no") != null) {
 			try {
-				Statement stmt2 = con.createStatement();
+				Statement stmt = con.createStatement();
 				String photoNo = req.getParameter("photo_no"); 
-				ResultSet rs2 = stmt2.executeQuery(
+				ResultSet rs = stmt.executeQuery(
 						"select photo from phowithalb where photo_no =" +photoNo);
-				if (rs2.next()) {
-					BufferedInputStream in2 = new BufferedInputStream(rs2.getBinaryStream("photo"));
-					byte[] buf2 = new byte[4 * 1024]; // 4K buffer
-					int len2;
-					while ((len2 = in2.read(buf2)) != -1) {
-						out.write(buf2, 0, len2);
-					} 
-					in2.close();
+				if (rs.next()) {
+					photoCol = "photo";
+					readPhoto(out, rs, photoCol);
 				} else {
 					res.sendError(HttpServletResponse.SC_NOT_FOUND); //404 p324, 方法p134
 				}
-				rs2.close();
-				stmt2.close();
+				rs.close();
+				stmt.close();
 				out.close();
 			}catch (Exception e) {
 			System.out.println(e); //直接印出錯誤訊息
-		}
+			}
 			
 		}
 		
@@ -92,13 +73,15 @@ public class DBGifReader2 extends HttpServlet {
 					"select act_photo1 from act where act_no =" +actNo);
 
 				if (rs.next()) {
-					BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream("act_photo1"));
-					byte[] buf = new byte[4 * 1024]; // 4K buffer
-					int len;
-					while ((len = in.read(buf)) != -1) { //讀到完是-1
-						out.write(buf, 0, len); //從0
-					}
-					in.close();
+					photoCol = "act_photo1";
+					readPhoto(out, rs, photoCol);
+//					BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream("act_photo1"));
+//					byte[] buf = new byte[4 * 1024]; // 4K buffer
+//					int len;
+//					while ((len = in.read(buf)) != -1) { //讀到完是-1
+//						out.write(buf, 0, len); //從0
+//					}
+//					in.close();
 				} else {
 					res.sendError(HttpServletResponse.SC_NOT_FOUND); //404 p324, 方法p134
 				}
@@ -109,11 +92,18 @@ public class DBGifReader2 extends HttpServlet {
 				System.out.println(e); //直接印出錯誤訊息
 			}
 			
-		}
-
-		
-		
+		}	
 	}
+	private void readPhoto(ServletOutputStream out, ResultSet rs, String photoCol) throws IOException, SQLException {
+        BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream(photoCol));
+        byte[] buf = new byte[4 * 1024]; // 4K buffer
+        int len;
+        while ((len = in.read(buf)) != -1) { // 讀到完是-1
+            out.write(buf, 0, len); // 從0
+        }
+        in.close();
+    }
+
 //與資料庫連線======================================================================
 	public void init() throws ServletException {
 		try {
@@ -133,5 +123,6 @@ public class DBGifReader2 extends HttpServlet {
 			System.out.println(e);
 		}
 	}
+	
 
 }

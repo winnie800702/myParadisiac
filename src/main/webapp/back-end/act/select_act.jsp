@@ -16,14 +16,6 @@
             position: relative;
         }
 
-        .row.g-0 {
-        position: relative;
-        }
-       .d-flex justify-content-end {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
         .photo-content d-flex {
             display: flex;
             justify-content: space-between;
@@ -38,27 +30,75 @@
             margin: 5px;
         }
 
-
-        .d-flex.justify-content-end {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        }
-
         .album-info {
-        margin-bottom: 50px;
-        font-size: 15px;
+	        margin-bottom: 50px;
+	        font-size: 15px;
         }
+        
+        .table_content {
+        border: 1px solid #eee;
+    	}
+<!--table-->
+    	.album {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
 
-        .btn-separator {
-        margin-right: 5px; 
-        }
+.album .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.album .col-md-7 {
+    flex: 0 0 70%;
+    max-width: 70%;
+    position: relative;
+}
+
+.album .col-md-5 {
+    flex: 0 0 30%;
+    max-width: 30%;
+}
+
+.album img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.album-info {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.album-info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.album-info table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.album-info table td:first-child {
+    width: 40%;
+}
+
+.album-info table td:nth-child(2) {
+    width: 60%;
+}
+
+
 
     </style>
 </head>
 
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
     <div class="container">
         
         <div style="border: 1px solid black; padding: 10px;">
@@ -66,6 +106,16 @@
             <h2 class="d-flex justify-content-between">
                查詢活動與檔期               
             </h2>
+            <c:if test="${not empty errorMsgs}">
+			    <div style="color: red; font-size: 15px;">
+			        請修正以下錯誤:
+			        <ul>
+			            <c:forEach var="message" items="${errorMsgs}">
+			                <li>${message}</li>
+			            </c:forEach>
+			        </ul>
+			    </div>
+			</c:if>
             <FORM METHOD="post" ACTION="${pageContext.request.contextPath}/act.do">
 				<b>輸入活動編號</b> <input type="text" name="actNo">
 				<input type="hidden" name="action" value="getOneActAllSchd">
@@ -77,14 +127,15 @@
 	<c:if test="${actPageQty > 0}">
 				<b><font color=red>第${currentPage}/${actPageQty}頁</font></b>
 	</c:if>
-	<c:forEach var="act" items="${actList}">
+	
         <div class="album card mb-3">
+        <c:forEach var="act" items="${actList}">
             <div class="row g-0">
-                <div class="col-md-7">
+                <div class="col-md-7" style="margin-bottom: 5px;">
                     <a href='${pageContext.request.contextPath}/act.do?action=getOne_For_Display&actNo=${act.actNo}'>					
 						<img
 							src="<%=request.getContextPath()%>/dbg.do?act_no=${act.actNo}"
-							style="width: 100%; height: 200px; object-fit: cover;" alt="相簿封面" class="img-fluid">
+							style="width: 100%; height: 300px; object-fit: cover;" alt="相簿封面" class="img-fluid">
 					</a>
                 </div>
                 <div class="col-md-5">
@@ -107,13 +158,13 @@
                                 <td>參加費用:</td>
                                 <td>${act.unitPrice}</td>
                             </tr>
-                        </table>
-                        
+                        </table>                       
                     </div>
                 </div>
             </div>
+        </c:forEach>
         </div>
-    </c:forEach>
+
 
 	<c:if test="${currentPage > 1}">
 			<a 
@@ -132,12 +183,12 @@
 				href="${pageContext.request.contextPath}/act.do?action=getAll&page=${actPageQty}">至最後一頁</a>&nbsp;
 	</c:if>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js">
-   
+    
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js">
     </script>
     </div>
 
 
-
+</div>
 </body>
 </html>

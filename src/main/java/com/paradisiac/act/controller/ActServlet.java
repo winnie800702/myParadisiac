@@ -48,16 +48,16 @@ public class ActServlet extends HttpServlet{
 				forwardPath = insertOrUpdate(req, res);
 				break;
 			case "getOne_For_Display":
-				getOneForDisplay(req, res);
-				forwardPath = "/back-end/act/list_one_act.jsp";
+				forwardPath = getOneForDisplay(req, res);
+//				forwardPath = "/back-end/act/list_one_act.jsp";
 				break;
 			case "getOneActAllSchd":
-				getOneForDisplay(req, res);
-				forwardPath = "/back-end/act/list_act_schd.jsp";
+				forwardPath = getOneForDisplay(req, res);
+//				forwardPath = "/back-end/act/list_act_schd.jsp";
 				break;
 			case "getOne_For_Update":
-				getOneForDisplay(req, res);
-				forwardPath = "/back-end/act/update_act.jsp";
+				forwardPath = getOneForDisplay(req, res);
+//				forwardPath = "/back-end/act/update_act.jsp";
 				break;
 			case "update":
 				forwardPath = insertOrUpdate(req, res);
@@ -87,10 +87,12 @@ public class ActServlet extends HttpServlet{
 		
 		List<ActVO> actList = actSvc.getAllActs(currentPage);
 
-		if (req.getSession().getAttribute("actPageQty") == null) {
-			int actPageQty = actSvc.getPageTotal();
-			req.getSession().setAttribute("actPageQty", actPageQty);
-		}
+//		if (req.getSession().getAttribute("actPageQty") == null) {
+//			int actPageQty = actSvc.getPageTotal();
+//			req.getSession().setAttribute("actPageQty", actPageQty);
+//		}
+		int actPageQty = actSvc.getPageTotal();
+		req.getSession().setAttribute("actPageQty", actPageQty);
 		
 		req.setAttribute("actList", actList);
 		req.setAttribute("currentPage", currentPage);
@@ -171,14 +173,44 @@ System.out.println("有判斷status");
 	}//新增或修改
 	
 	//查單筆活動與檔期
-	public void getOneForDisplay(HttpServletRequest req, HttpServletResponse res) {
-		Integer actNo = Integer.valueOf(req.getParameter("actNo"));
-		
-		Set<SchdVO> actSchdSet = actSvc.getSchdByActno(actNo);
-		req.setAttribute("actSchdSet", actSchdSet);
+	public String getOneForDisplay(HttpServletRequest req, HttpServletResponse res) {
+//		Integer actNo = Integer.valueOf(req.getParameter("actNo"));
+		List<String> errorMsgs = new LinkedList<String>();
+		String actNoS = req.getParameter("actNo");
+		Integer actNo = null;
+
+		try {
+			actNo = Integer.valueOf(actNoS);
+		} catch (Exception e) {
+			errorMsgs.add("請輸入數字");
+		}
+		if (!errorMsgs.isEmpty()) {
+			req.setAttribute("errorMsgs", errorMsgs); // 含有輸入格式錯誤的物件,也存入req
+			return getAllActs(req, res); //跳回所有活動的查詢頁面						
+		}
 		
 		ActVO actVO = actSvc.getActByActno(actNo);
+		if(actVO == null) {
+			errorMsgs.add("不存在此活動編號");
+		}
+		if (!errorMsgs.isEmpty()) {
+			req.setAttribute("errorMsgs", errorMsgs); // 含有輸入格式錯誤的物件,也存入req
+			return getAllActs(req, res); //跳回所有活動的查詢頁面						
+		}
+		
+		Set<SchdVO> actSchdSet = actSvc.getSchdByActno(actNo);
+		
+		
+		req.setAttribute("actSchdSet", actSchdSet);				
 		req.setAttribute("actVO", actVO);
+		
+		if(req.getParameter("action").equals("getOneActAllSchd")) {
+			return "/back-end/act/list_act_schd.jsp";
+		}else if(req.getParameter("action").equals("getOne_For_Update")) {
+			return "/back-end/act/update_act.jsp";
+		}else {
+			return "/back-end/act/list_one_act.jsp";
+		}
 	}
 	//前端-查全部上架活動
 	private void getAllActiveActs(HttpServletRequest req, HttpServletResponse res) {
@@ -187,10 +219,12 @@ System.out.println("有判斷status");
 		
 		List<ActVO> actList = actSvc.getAllActiveActs(currentPage);
 
-		if (req.getSession().getAttribute("actPageQty") == null) {
-			int actPageQty = actSvc.getPageActiveTotal();
-			req.getSession().setAttribute("actPageQty", actPageQty);
-		}		
+//		if (req.getSession().getAttribute("actPageQty") == null) {
+//			int actPageQty = actSvc.getPageActiveTotal();
+//			req.getSession().setAttribute("actPageQty", actPageQty);
+//		}
+		int actPageQty = actSvc.getPageActiveTotal();
+		req.getSession().setAttribute("actPageQty", actPageQty);
 		req.setAttribute("actList", actList);
 		req.setAttribute("currentPage", currentPage);	
 

@@ -224,7 +224,7 @@ table {
 			var nameInput = document.querySelector('input[name="' + inputName
 					+ '"]');
 			if (fileInput.files.length > 0) { //有選到檔案, 檔案名稱長度>0
-				nameInput.value = fileInput.name; //nameInput.value = fileInput.files[0].name;
+				nameInput.value = fileInput.files[0].name; 
 			} else {
 				nameInput.value = "";
 			}

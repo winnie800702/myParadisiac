@@ -39,6 +39,7 @@ table {
 
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 	<div class="container">
 	<form method="post" action="${pageContext.request.contextPath}/act.do">
 		<div style="text-align: center;">
@@ -116,6 +117,6 @@ table {
 
 
 
-
+</div>
 </body>
 </html>

@@ -11,16 +11,14 @@
 <title>部門資料 - listOneDept</title>
 <style>
   table#table-1 {
-	background-color: #CCCCFF;
     border: 2px solid black;
-    text-align: center;
-    margin: auto;
+	text-align: center;
   }
   
     table#deptContent {
         width: 100%;
         border-collapse: collapse;
-        margin: auto;
+
     }
     table#deptContent th {
         background-color: #ccc;
@@ -32,7 +30,7 @@
         text-align: center;
     }
     table#empContent {
-    	margin: auto;
+
     }
     table#empContent th {
         background-color: #ccc;
@@ -55,13 +53,13 @@
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
-<table id="table-1">
+<div style="margin-left: 200px;">
+<table id="table-1" style="width:30%; text-align:center;">
 	<tr><td>
 		 <h3>部門資料 - listOneDept</h3>
 		 <h4><a href="${pageContext.request.contextPath}/back-end/dept/select_dept_page.jsp">回首頁</a></h4>
 	</td></tr>
 </table>
-
 	<div>
 		<table id="deptContent"class= dept style="width:30%; text-align:center;">
 			<!-- 部門資料 -->
@@ -99,6 +97,6 @@
 		</table>
 	</div>
 
-
+</div>
 </body>
 </html>

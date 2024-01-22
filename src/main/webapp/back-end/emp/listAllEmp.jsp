@@ -97,8 +97,9 @@
 	</style>
 
 </head>
-<body bgcolor='white'>
+<body bgcolor='white' >
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 <div class="container mt-5">
 <table id="table-1">
 	<tr>
@@ -153,6 +154,6 @@
 </table>
 </div>
 <%@ include file="page2.file" %>
-
+</div>
 </body>
 </html>

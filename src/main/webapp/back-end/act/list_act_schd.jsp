@@ -83,6 +83,7 @@
 </head>
 <body>
 <%@ include file="/back-end/index/ManagerBody.jsp"%>
+<div style="margin-left: 200px;">
 <div class="container">
 	<div style="text-align: center; padding-right:0;">
 		<form method="post" action="${pageContext.request.contextPath}/act.do">
@@ -148,7 +149,7 @@
         </tr>
         </c:forEach>
     </table>
-
+</div>
 </div>
 </body>
 </html>
